@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   EntityManager,
+  EntityTarget,
   FindManyOptions,
   FindOptionsWhere,
   In,
@@ -23,15 +24,25 @@ export class BaseRepository<T extends Base> extends Repository<T> {
     return this.manager;
   }
 
-  getById(id: number, manager?: EntityManager): Promise<T> {
-    return manager
-      ? manager.findOneBy(this.repository.target, { id } as FindOptionsWhere<T>)
-      : this.findOneBy({ id } as FindOptionsWhere<T>);
+  private getTarget(): EntityTarget<T> {
+    return this.repository.target;
   }
 
-  getByIds(ids: number[]): Promise<T[]> {
-    return this.find({
+  getById(id: number, manager?: EntityManager): Promise<T> {
+    const options = { id } as FindOptionsWhere<T>;
+
+    return manager
+      ? manager.findOneBy(this.getTarget(), options)
+      : this.findOneBy(options);
+  }
+
+  getByIds(ids: number[], manager?: EntityManager): Promise<T[]> {
+    const options = {
       id: In(ids),
-    } as FindManyOptions<T>);
+    } as FindManyOptions<T>;
+
+    return manager
+      ? manager.find(this.getTarget(), options)
+      : this.find(options);
   }
 }

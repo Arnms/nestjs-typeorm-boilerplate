@@ -8,7 +8,7 @@ import {
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { TransactionInterceptor } from 'src/common/interceptor/transaction.interceptor';
-import { TransactionManager } from 'src/common/decorator/transactionManager.decorator';
+import { TransactionManager } from 'src/common/decorator/transaction.decorator';
 import { EntityManager } from 'typeorm';
 
 @Controller('user')
