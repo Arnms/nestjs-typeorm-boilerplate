@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyOptions, FindOptionsWhere, In, Repository } from 'typeorm';
+import {
+  EntityManager,
+  FindManyOptions,
+  FindOptionsWhere,
+  In,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { Base } from './base.entity';
 
 @Injectable()
@@ -8,15 +15,21 @@ export class BaseRepository<T extends Base> extends Repository<T> {
     super(repository.target, repository.manager, repository.queryRunner);
   }
 
-  getQueryBuilder() {
+  getQueryBuilder(): SelectQueryBuilder<T> {
     return this.repository.createQueryBuilder();
   }
 
-  getById(id: number) {
-    return this.findOneBy({ id } as FindOptionsWhere<T>);
+  getQueryManager(): EntityManager {
+    return this.manager;
   }
 
-  getByIds(ids: number[]) {
+  getById(id: number, manager?: EntityManager): Promise<T> {
+    return manager
+      ? manager.findOneBy(this.repository.target, { id } as FindOptionsWhere<T>)
+      : this.findOneBy({ id } as FindOptionsWhere<T>);
+  }
+
+  getByIds(ids: number[]): Promise<T[]> {
     return this.find({
       id: In(ids),
     } as FindManyOptions<T>);

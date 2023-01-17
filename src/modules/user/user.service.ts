@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { User } from './entities/user.entity';
-import { FindOneOptions } from 'typeorm';
+import { EntityManager, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -13,6 +13,10 @@ export class UserService {
         id,
       },
     });
+  }
+
+  findOneWithTransaction(options: FindOneOptions, manager?: EntityManager) {
+    return this.userRepository.getById(2, manager);
   }
 
   findOne(options: FindOneOptions) {
