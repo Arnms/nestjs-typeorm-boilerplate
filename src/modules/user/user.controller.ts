@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
-import { TransactionInterceptor } from 'src/common/interceptor/transaction.interceptor';
-import { TransactionManager } from 'src/common/decorator/transaction.decorator';
+import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
+import { TransactionManager } from 'src/common/decorators/transaction.decorator';
 import { EntityManager } from 'typeorm';
 
 @Controller('user')

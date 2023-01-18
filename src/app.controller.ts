@@ -7,6 +7,8 @@ export class AppController {
 
   @Post('/file/upload')
   async fileUpload(@Body('fileName') fileName: string) {
-    return await this.mediaService.getSignedUrl(fileName);
+    return await this.mediaService.getSignedUrl(
+      window.decodeURIComponent(fileName),
+    );
   }
 }
