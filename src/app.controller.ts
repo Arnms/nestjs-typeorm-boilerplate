@@ -1,7 +1,12 @@
-import { Controller } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { MediaService } from './services/media/media.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly mediaService: MediaService) {}
+
+  @Post('/file/upload')
+  async fileUpload(@Body('fileName') fileName: string) {
+    return await this.mediaService.getSignedUrl(fileName);
+  }
 }

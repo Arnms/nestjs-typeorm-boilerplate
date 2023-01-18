@@ -17,7 +17,8 @@ export const databaseProviders = [
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         synchronize: false, // 절대 건드리면 안됨
         logging: ['query', 'error'],
-        poolSize: 10,
+        poolSize: +configService.get('DB_CONNECTION_LIMIT'),
+        timezone: configService.get('DB_TIMEZONE'),
       } as MysqlConnectionOptions);
 
       return dataSource.initialize();
