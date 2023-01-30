@@ -16,7 +16,7 @@ export class MediaService {
     });
   }
 
-  async getSignedUrl(fileName: string) {
+  async getSignedUrl(fileName: string): Promise<AWS.S3.PresignedPost> {
     const key = `${this.env}/${fileName}`;
     const postParams: AWS.S3.PresignedPost.Params = {
       Bucket: process.env.S3_BUCKET_NAME,
