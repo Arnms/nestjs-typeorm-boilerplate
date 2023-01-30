@@ -8,9 +8,9 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard';
 import { Request } from 'express';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
