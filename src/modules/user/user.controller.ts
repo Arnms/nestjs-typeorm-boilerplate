@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Inject,
+  UseGuards,
   UseInterceptors,
   forwardRef,
 } from '@nestjs/common';
@@ -10,7 +11,11 @@ import { User } from './entities/user.entity';
 import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
 import { TransactionManager } from 'src/common/decorators/transaction.decorator';
 import { EntityManager } from 'typeorm';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Permission } from 'src/common/decorators/permission.decorator';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
 
+@UseGuards(JwtAuthGuard, PermissionGuard)
 @Controller('user')
 export class UserController {
   constructor(
@@ -19,6 +24,7 @@ export class UserController {
   ) {}
 
   @Get('/')
+  @Permission('user')
   @UseInterceptors(TransactionInterceptor)
   async findAll(@TransactionManager() manager: EntityManager): Promise<User> {
     return await this.userService.findOneWithTransaction({}, manager);

@@ -1,15 +1,18 @@
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
+const s3: AWS.S3 = new AWS.S3();
+
+@Injectable()
 export class MediaService {
   env: string;
   bucket: string;
-  s3: AWS.S3;
 
   constructor(configService: ConfigService) {
     this.env = configService.get('NODE_ENV');
     this.bucket = configService.get('S3_BUCKET_NAME');
-    this.s3 = new AWS.S3({
+    s3.config.update({
       region: configService.get('AWS_REGION'),
       accessKeyId: configService.get('S3_ACCESS_KEY_ID'),
       secretAccessKey: configService.get('S3_SECRET_ACCESS_KEY'),
@@ -40,10 +43,7 @@ export class MediaService {
       };
 
     return new Promise((resolve, reject) => {
-      this.s3.createPresignedPost(
-        postParams,
-        presignedCallback(resolve, reject),
-      );
+      s3.createPresignedPost(postParams, presignedCallback(resolve, reject));
     });
   }
 }
